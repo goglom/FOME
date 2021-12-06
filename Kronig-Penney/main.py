@@ -5,15 +5,14 @@ from matplotlib.widgets import Slider
 
 warnings.filterwarnings("ignore")
 
-step = 0.1
+step = 1e-6
 e = 1.6 * 1e-19
-a = 0.54310 * 1e-9
-m = 0.19*9.1 * 1e-31
-b = 1/5 * a
+a = 30e-9
+m = 0.063* 9.1e-31
+b = 10e-9
 h = 6.6 * 1e-34
 
-E = np.arange(0, 50, step)
-N = 3
+E = np.arange(0, 2.168, step)
 
 def dirac(V,E):
     alpha, beta = ab(V, E)
@@ -35,7 +34,7 @@ def kronig_penney(V, E):
 fig, (ax) = plt.subplots()
 fig.subplots_adjust(bottom=0.2, left=0.1)
 ax_v= plt.axes([0.10, 0.05, 0.8, 0.03])
-slider_v = Slider(ax_v, "V", 0, 30, 10, valstep=0.5)
+slider_v = Slider(ax_v, "V", 0, 30, 0.329, valstep=0.05)
 
 
 def update(*args):
@@ -48,9 +47,9 @@ def update(*args):
     ax.plot(k_kp, E, 'b')
     ax.plot(-k_kp, E, 'b')
 
-    k_d = dirac(V, E)
-    ax.plot(k_d, E, 'r')
-    ax.plot(-k_d, E, 'r')
+    #k_d = dirac(V, E)
+    #ax.plot(k_d, E, 'r')
+    #ax.plot(-k_d, E, 'r')
     ax.grid()
 
 
