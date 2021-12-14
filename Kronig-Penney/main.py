@@ -1,59 +1,46 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import warnings
-from matplotlib.widgets import Slider
 
 warnings.filterwarnings("ignore")
 
-step = 1e-6
 e = 1.6 * 1e-19
-a = 30e-9
-m = 0.063* 9.1e-31
-b = 10e-9
+a = 10e-9
+m = 0.51* 9.1e-31
+b = 3e-9
 h = 6.6 * 1e-34
 
-E = np.arange(0, 2.168, step)
 
 def dirac(V,E):
     alpha, beta = ab(V, E)
     r = 1/a * np.arccos(np.cos(alpha * a) - (beta**2 * b * a) / 2 * np.sin(alpha*a) / (alpha * a))
     return r
 
+
 def ab(V, E):
-    alpha = np.sqrt(8 * np.pi**2 * m * E * e / h**2)
-    beta  = np.sqrt(8 * np.pi**2 * m * (E+V) * e / h**2)
+    alpha = np.sqrt(8 * np.pi**2 * m * np.abs(E) * e / h**2)
+    beta  = np.sqrt(8 * np.pi**2 * m * (V - np.abs(E)) * e / h**2)
     return alpha, beta
+
 
 def kronig_penney(V, E):
     alpha, beta = ab(V, E)
-    r = 1/a * np.arccos((np.cos(beta*b) * np.cos(alpha*(a-b)) ) - (alpha**2 + beta**2) / (2*alpha * beta) * np.sin(beta*b) * np.sin(alpha*(a-b)))
+    r =1/a * np.arccos((np.cos(beta*b) * np.cosh(alpha*(a-b)) ) - (beta**2 - alpha**2) / (2*alpha * beta) * np.sin(beta*b) * np.sinh(alpha*(a-b)))
     return r
 
+V = 0.3
+step = 1e-8
+E = np.arange(-V, 0, step)
 
-
-fig, (ax) = plt.subplots()
-fig.subplots_adjust(bottom=0.2, left=0.1)
-ax_v= plt.axes([0.10, 0.05, 0.8, 0.03])
-slider_v = Slider(ax_v, "V", 0, 30, 0.329, valstep=0.05)
-
-
-def update(*args):
-    ax.clear()
-
-    V = slider_v.val
-
-    k_kp = kronig_penney(V, E)
-
-    ax.plot(k_kp, E, 'b')
-    ax.plot(-k_kp, E, 'b')
-
-    #k_d = dirac(V, E)
-    #ax.plot(k_d, E, 'r')
-    #ax.plot(-k_d, E, 'r')
-    ax.grid()
-
-
-slider_v.on_changed(update)
-update()
-
+zip_factor = 15
+k_kp = kronig_penney(V, E)[::zip_factor]
+E = E[::zip_factor]
+plt.plot(k_kp, E, 'r')
+plt.plot(-k_kp, E, 'r')
+plt.grid()
 plt.show()
+
+#alpha = np.sqrt(8 * np.pi**2 * m * np.abs(E) * e / h**2)
+#beta  = np.sqrt(8 * np.pi**2 * m * (V - np.abs(E)) * e / h**2)
+#plt.plot(E, alpha, 'r', label='alpha')
+#plt.plot(E, beta, 'b', label='beta')
