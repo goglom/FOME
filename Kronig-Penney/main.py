@@ -4,12 +4,6 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-e = 1.6 * 1e-19
-a = 10e-9
-m = 0.51* 9.1e-31
-b = 3e-9
-h = 6.6 * 1e-34
-
 
 def dirac(V,E):
     alpha, beta = ab(V, E)
@@ -28,13 +22,20 @@ def kronig_penney(V, E):
     r =1/a * np.arccos((np.cos(beta*b) * np.cosh(alpha*(a-b)) ) - (beta**2 - alpha**2) / (2*alpha * beta) * np.sin(beta*b) * np.sinh(alpha*(a-b)))
     return r
 
-V = 0.3
-step = 1e-8
+# Constants
+e = 1.6 * 1e-19
+h = 6.6 * 1e-34
+m_e = 9.1e-31
+
+# Variables
+b = 3e-9
+a = 10e-9
+m = 0.6 * m_e
+V = 0.43 #2.26 - 1.77
+step = 0.5e-8
 E = np.arange(-V, 0, step)
 
-zip_factor = 15
-k_kp = kronig_penney(V, E)[::zip_factor]
-E = E[::zip_factor]
+k_kp = kronig_penney(V, E)
 plt.plot(k_kp, E, 'r')
 plt.plot(-k_kp, E, 'r')
 plt.grid()
