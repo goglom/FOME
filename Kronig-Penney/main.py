@@ -40,7 +40,3 @@ plt.plot(-k_kp, E, 'r')
 plt.grid()
 plt.show()
 
-#alpha = np.sqrt(8 * np.pi**2 * m * np.abs(E) * e / h**2)
-#beta  = np.sqrt(8 * np.pi**2 * m * (V - np.abs(E)) * e / h**2)
-#plt.plot(E, alpha, 'r', label='alpha')
-#plt.plot(E, beta, 'b', label='beta')
